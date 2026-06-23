@@ -7,7 +7,7 @@ from scipy.stats import norm,beta
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 import pandas as pd
-# np.math.factorial = np.vectorize(np.math.factorial)
+# math.factorial = np.vectorize(math.factorial)
 
 class AscendingOrderStatPrior(bilby.prior.Prior):
 
@@ -131,15 +131,15 @@ class AscendingOrderStatPrior(bilby.prior.Prior):
         if this_order_num==1:
             return self.beta_dist(v, j, n+1-j)
         try:
-            n_factorial = np.math.factorial(n)
-            i_minus_1_factorial = np.math.factorial(i - 1)
-            j_minus_i_minus_1_factorial = np.math.factorial(j - i - 1)
-            n_minus_j_factorial = np.math.factorial(n - j)
+            n_factorial = math.factorial(n)
+            i_minus_1_factorial = math.factorial(i - 1)
+            j_minus_i_minus_1_factorial = math.factorial(j - i - 1)
+            n_minus_j_factorial = math.factorial(n - j)
         except TypeError:
-            n_factorial = np.vectorize(np.math.factorial)(n)
-            i_minus_1_factorial = np.vectorize(np.math.factorial)(i - 1)
-            j_minus_i_minus_1_factorial = np.vectorize(np.math.factorial)(j - i - 1)
-            n_minus_j_factorial = np.vectorize(np.math.factorial)(n - j)
+            n_factorial = np.vectorize(math.factorial)(n)
+            i_minus_1_factorial = np.vectorize(math.factorial)(i - 1)
+            j_minus_i_minus_1_factorial = np.vectorize(math.factorial)(j - i - 1)
+            n_minus_j_factorial = np.vectorize(math.factorial)(n - j)
         up = (n_factorial * (u ** (i - 1)) * ((v - u) ** (j - i - 1)) * ((1 - v) ** (n - j)))
         down = (i_minus_1_factorial * j_minus_i_minus_1_factorial * n_minus_j_factorial)
         pdf_value = up  / down 
@@ -151,14 +151,14 @@ class AscendingOrderStatPrior(bilby.prior.Prior):
     def beta_dist(self,x, alpha, beta):
         # when alpha and beta are integers
         try:
-            value = x**(alpha-1)*(1-x)**(beta-1)*np.math.factorial(alpha+beta-1)/np.math.factorial(alpha-1)/np.math.factorial(beta-1)
+            value = x**(alpha-1)*(1-x)**(beta-1)*math.factorial(alpha+beta-1)/math.factorial(alpha-1)/math.factorial(beta-1)
         except TypeError:
-            value = x**(alpha-1)*(1-x)**(beta-1)*np.vectorize(np.math.factorial)(alpha+beta-1)/np.math.factorial(alpha-1)/np.vectorize(np.math.factorial)(beta-1)
+            value = x**(alpha-1)*(1-x)**(beta-1)*np.vectorize(math.factorial)(alpha+beta-1)/math.factorial(alpha-1)/np.vectorize(math.factorial)(beta-1)
         return value
     def beta_inc(self,x, a, b):
         #incomplete beta function when a and b are int
         value = scipy.special.betainc(a, b, x)
-        return value * np.math.factorial(a-1) * np.math.factorial(b-1) / np.math.factorial(a+b-1)
+        return value * math.factorial(a-1) * math.factorial(b-1) / math.factorial(a+b-1)
    
     def nomalized_conditional_cdf(self,x, u, n, i, j):
         # for normalized x and u
@@ -167,8 +167,8 @@ class AscendingOrderStatPrior(bilby.prior.Prior):
             return scipy.stats.beta.cdf(x, j,n+1-j)
         
         # cdf of \pi(v|u) with v>u
-        value = ((1-u)**(-i+n)* u**(-1+i)*self.beta_inc((u-x)/(-1+u), -i+j, 1-j+n)*np.math.factorial(n))/\
-        (np.math.factorial(i-1)*np.math.factorial(-i+j-1)*np.math.factorial(1-j+n-1))
+        value = ((1-u)**(-i+n)* u**(-1+i)*self.beta_inc((u-x)/(-1+u), -i+j, 1-j+n)*math.factorial(n))/\
+        (math.factorial(i-1)*math.factorial(-i+j-1)*math.factorial(1-j+n-1))
         return value/self.beta_dist(u, i, n+1-i)
 
     def normalized_conditional_icdf(self, y, u, n, this_order_num):
@@ -181,7 +181,7 @@ class AscendingOrderStatPrior(bilby.prior.Prior):
             return scipy.special.betaincinv(j,n+1-j,y)
         
         # cdf of \pi(u|v) with v>u
-        value = y * self.beta_dist(u, i, n+1-i)*np.math.factorial(i-1)*np.math.factorial(n-i)/((1-u)**(-i+n)*u**(-1+i)*np.math.factorial(n))
+        value = y * self.beta_dist(u, i, n+1-i)*math.factorial(i-1)*math.factorial(n-i)/((1-u)**(-i+n)*u**(-1+i)*math.factorial(n))
 
         return u - scipy.special.betaincinv(-i+j, 1-j+n, value) * (-1+u)
     
@@ -313,15 +313,15 @@ class DescendingOrderStatPrior(bilby.prior.Prior):
         if this_order_num==1:
             return self.beta_dist(u, i, n+1-i)
         try:
-            n_factorial = np.math.factorial(n)
-            i_minus_1_factorial = np.math.factorial(i - 1)
-            j_minus_i_minus_1_factorial = np.math.factorial(j - i - 1)
-            n_minus_j_factorial = np.math.factorial(n - j)
+            n_factorial = math.factorial(n)
+            i_minus_1_factorial = math.factorial(i - 1)
+            j_minus_i_minus_1_factorial = math.factorial(j - i - 1)
+            n_minus_j_factorial = math.factorial(n - j)
         except TypeError:
-            n_factorial = np.vectorize(np.math.factorial)(n)
-            i_minus_1_factorial = np.vectorize(np.math.factorial)(i - 1)
-            j_minus_i_minus_1_factorial = np.vectorize(np.math.factorial)(j - i - 1)
-            n_minus_j_factorial = np.vectorize(np.math.factorial)(n - j)
+            n_factorial = np.vectorize(math.factorial)(n)
+            i_minus_1_factorial = np.vectorize(math.factorial)(i - 1)
+            j_minus_i_minus_1_factorial = np.vectorize(math.factorial)(j - i - 1)
+            n_minus_j_factorial = np.vectorize(math.factorial)(n - j)
         up = (n_factorial * (u ** (i - 1)) * ((v - u) ** (j - i - 1)) * ((1 - v) ** (n - j)))
         down = (i_minus_1_factorial * j_minus_i_minus_1_factorial * n_minus_j_factorial)
         pdf_value = up  / down 
@@ -333,14 +333,14 @@ class DescendingOrderStatPrior(bilby.prior.Prior):
     def beta_dist(self,x, alpha, beta):
         # when alpha and beta are integers
         try:
-            value = x**(alpha-1)*(1-x)**(beta-1)*np.math.factorial(alpha+beta-1)/np.math.factorial(alpha-1)/np.math.factorial(beta-1)
+            value = x**(alpha-1)*(1-x)**(beta-1)*math.factorial(alpha+beta-1)/math.factorial(alpha-1)/math.factorial(beta-1)
         except TypeError:
-            value = x**(alpha-1)*(1-x)**(beta-1)*np.vectorize(np.math.factorial)(alpha+beta-1)/np.vectorize(np.math.factorial)(alpha-1)/np.vectorize(np.math.factorial)(beta-1)
+            value = x**(alpha-1)*(1-x)**(beta-1)*np.vectorize(math.factorial)(alpha+beta-1)/np.vectorize(math.factorial)(alpha-1)/np.vectorize(math.factorial)(beta-1)
         return value
     def beta_inc(self,x, a, b):
         #incomplete beta function when a and b are int
         value = scipy.special.betainc(a, b, x)
-        return value * np.math.factorial(a-1) * np.math.factorial(b-1) / np.math.factorial(a+b-1)
+        return value * math.factorial(a-1) * math.factorial(b-1) / math.factorial(a+b-1)
    
     def nomalized_conditional_cdf(self, x, v, n, this_order_num):
         # for normalized x and u
@@ -352,8 +352,8 @@ class DescendingOrderStatPrior(bilby.prior.Prior):
             return scipy.stats.beta.cdf(x, i,n+1-i)
         
         # cdf of \pi(u|v) with v>u
-        value = ((1-v)**(-j+n)*v**(-1+j)*scipy.special.betainc(i, -i+j, x/v)*np.math.factorial(n))/\
-        (np.math.factorial(j-1)*np.math.factorial(1-j+n-1))
+        value = ((1-v)**(-j+n)*v**(-1+j)*scipy.special.betainc(i, -i+j, x/v)*math.factorial(n))/\
+        (math.factorial(j-1)*math.factorial(1-j+n-1))
         return value/self.beta_dist(v, j, n+1-j)
 
     def normalized_conditional_icdf(self, y, v, n, this_order_num):
@@ -366,7 +366,7 @@ class DescendingOrderStatPrior(bilby.prior.Prior):
             return scipy.special.betaincinv(i,n+1-i,y)
         
         # cdf of \pi(u|v) with v>u
-        value = y * self.beta_dist(v, j, n+1-j)*np.math.factorial(j-1)*np.math.factorial(1-j+n-1)/((1-v)**(-j+n)*v**(-1+j)*np.math.factorial(n))
+        value = y * self.beta_dist(v, j, n+1-j)*math.factorial(j-1)*math.factorial(1-j+n-1)/((1-v)**(-j+n)*v**(-1+j)*math.factorial(n))
 
         return scipy.special.betaincinv(i, -i+j, value) * v
 
